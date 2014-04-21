@@ -1,36 +1,29 @@
 // IoT Cloud QuickStart Driver
-// node.js running on BeagleBone Black with BLE adaptor and Texas Instruments SenstorTag CC2451
-
+// This is a node.js sample to run on a BeagleBone Black equipped with a BLE USB adaptor
+//  and Texas Instruments SenstorTag CC2451 (over BLE)
 
 var util = require('util');
 var async = require('async');
 var SensorTag = require('sensortag');
-
 var mqtt = require('mqtt');
+
 var host = "messaging.quickstart.internetofthings.ibmcloud.com"; // production http://quickstart.internetofthings.ibmcloud.com
 var port = "1883";
 var client;
 var deviceId;
 var topic;
 
-
 var tagData = {};
 tagData.d = {};
-
-tagData.print = function () {
-  console.log('\tobject temperature = %d °C  ambient temperature = %d °C', this.objectTemp, this.ambientTemp);
-  console.log('\taccelerometer x = %d G  y = %d G  z = %d G', this.accelerometer.x, this.accelerometer.y, this.accelerometer.z);
-  console.log('\thumidity = %d %  temperature = %d °C', this.humidity, this.temperature);
-  console.log('\tmagnetometer x = %d μT  y = %d μT  z = %d μT', this.magnetometer.x, this.magnetometer.y, this.magnetometer.z);
-  console.log('\tpressure = %d mBar', this.pressure);
-  console.log('\tgyroscope x = %d °/s  y = %d °/s  z = %d °/s', this.gyroscope.x, this.gyroscope.y, this.gyroscope.z);
-};
 
 tagData.toJson = function () {
   return JSON.stringify(this);
 };
 
 tagData.publish = function () {
+  // dont publish unless there is a full set of data
+  // alternative: only enable publish when most sensortag callbacks have fired
+
   if (tagData.d.hasOwnProperty("temp")) {
 	client.publish(topic, tagData.toJson());
 	//console.log(topic, tagData.toJson());
@@ -40,8 +33,8 @@ tagData.publish = function () {
 require('getmac').getMac(function(err, macAddress) {
   if (err) throw err;
   deviceId = macAddress.replace(/:/g, '');
-  client = mqtt.createClient(port, host, { "clientId": "quickstart:"+deviceId } );
-  topic = "iot-1/d/" + deviceId + "/evt/titag-quickstart_/json"; // Not right MessageType Defect in UI
+  client = mqtt.createClient(port, host, { "clientId": "quickstart:"+deviceId, "keepalive": 30 } );
+  topic = "iot-1/d/" + deviceId + "/evt/titag-quickstart/json";
 });
 
 console.log('Press side button on SensorTag to connect');

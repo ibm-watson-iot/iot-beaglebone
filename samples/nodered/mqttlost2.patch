@@ -1,0 +1,38 @@
+--- nodes/core/io/lib/mqttConnectionPool.js.orig	2014-04-20 18:01:46.553934885 +0000
++++ nodes/core/io/lib/mqttConnectionPool.js	2014-04-20 23:12:03.178937105 +0000
+@@ -50,6 +50,7 @@
+                         } else {
+                             if (!connecting) {
+                                 connecting = true;
++				//console.log("publish/connect");
+                                 client.connect(options);
+                             }
+                             queue.push(msg);
+@@ -75,6 +76,7 @@
+                     connect: function() {
+                         if (!client.isConnected() && !connecting) {
+                             connecting = true;
++			    //console.log("connect/connect");
+                             client.connect(options);
+                         }
+                     },
+@@ -109,16 +111,15 @@
+                 client.on('connectionlost', function(err) {
+                         util.log('[mqtt] ['+uid+'] connection lost to broker tcp://'+broker+':'+port);
+                         setTimeout(function() {
+-                                if (client) {
+-                                    client.connect(options);
+-                                }
++			    if (client) obj.connect();
+                         }, settings.mqttReconnectTime||5000);
+                 });
+                 client.on('disconnect', function() {
++			connecting = false;
+                         util.log('[mqtt] ['+uid+'] disconnected from broker tcp://'+broker+':'+port);
+                 });
+ 
+-                return obj
++                return obj;
+             }();
+         }
+         connections[id]._instances += 1;
