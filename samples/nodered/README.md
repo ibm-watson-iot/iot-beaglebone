@@ -8,7 +8,7 @@ You should now be ready to download and run the sample software and connect.
 Connect
 =======
 Log in to Debian as root (by default, no password is required).
-Clone the GitHub project: git clone https://ibm_messaging/iot-beaglebone
+Clone the GitHub project: git clone https://github.com/ibm_messaging/iot-beaglebone
 
 cd samples/nodered
 run ./setup.sh. This completes the following tasks:
@@ -17,7 +17,7 @@ This will take a few minutes. When it successfully completes the flow should be 
 
 To start the flow of messages press the button on the side of the SensorTag which will initiate the discovery of the tag by the beagelBone.
 
-Find out what your MAC address is, this can be found in the node-red service log file. 
+Find out what your MAC address is, this can be found in the node-red service log file (node.out). 
  
 
 Sample Development

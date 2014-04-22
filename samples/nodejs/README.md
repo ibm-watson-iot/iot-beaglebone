@@ -8,7 +8,7 @@ You should now be ready to download and run the sample software and connect.
 Connect
 =======
 Log in to Debian as root (by default, no password is required).
-Clone the GitHub project: git clone https://ibm_messaging/iot-beaglebone
+Clone the GitHub project: git clone https://github.com/ibm_messaging/iot-beaglebone
 
 cd samples/nodejs
 Run setup.sh. This completes the following tasks:
