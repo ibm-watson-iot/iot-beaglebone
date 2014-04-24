@@ -33,6 +33,6 @@ Connect
  
 
 Development
-===========
+-----------
 You can connect a browser to port [beaglebone-address:1880]  in order to see the flow in the Node-RED UI modify and use debug nodes to show events emitted.
 In case you need to rebiild the flow the code for the tagData merge function can be found in the file function-tagData-merge.js
