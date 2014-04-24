@@ -1,13 +1,24 @@
+//*****************************************************************************
+// Copyright (c) 2014 IBM Corporation and other Contributors.
+//
+// All rights reserved. This program and the accompanying materials
+// are made available under the terms of the Eclipse Public License v1.0
+// which accompanies this distribution, and is available at
+// http://www.eclipse.org/legal/epl-v10.html 
+//
+// Contributors:
+//  IBM - Initial Contribution
+//*****************************************************************************
+
 // IoT Cloud QuickStart Driver
-// This is a node.js sample to run on a BeagleBone Black equipped with a BLE USB adaptor
-//  and Texas Instruments SenstorTag CC2451 (over BLE)
+// A sample to run on a BeagleBone Black equipped with a BLE USB adaptor connecting a Texas Instruments SenstorTag CC2451
 
 var util = require('util');
 var async = require('async');
 var SensorTag = require('sensortag');
 var mqtt = require('mqtt');
 
-var host = "messaging.quickstart.internetofthings.ibmcloud.com"; // production http://quickstart.internetofthings.ibmcloud.com
+var host = "messaging.quickstart.internetofthings.ibmcloud.com"; 
 var port = "1883";
 var client;
 var deviceId;
@@ -32,12 +43,12 @@ tagData.publish = function () {
 
 require('getmac').getMac(function(err, macAddress) {
   if (err) throw err;
-  deviceId = macAddress.replace(/:/g, '');
+  deviceId = macAddress.replace(/:/g, '').toLowerCase();
   client = mqtt.createClient(port, host, { "clientId": "quickstart:"+deviceId, "keepalive": 30 } );
   topic = "iot-1/d/" + deviceId + "/evt/titag-quickstart/json";
 });
 
-console.log('Press side button on SensorTag to connect');
+console.log('Press the side button on the SensorTag to connect');
 SensorTag.discover(function(sensorTag) {
 
   sensorTag.on('disconnect', function() {
@@ -45,6 +56,7 @@ SensorTag.discover(function(sensorTag) {
     process.exit(0);
   });
 
+  // run functions in series
   async.series([
       function(callback) {
         console.log(deviceId);
