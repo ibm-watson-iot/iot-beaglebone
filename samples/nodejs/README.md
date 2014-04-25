@@ -16,7 +16,7 @@ There are a few tasks to complete to prepare your BeagleBone for connection to t
 4. Insert the USB BLE addaptor into the USB socket and confirm that the SensorTag can be detected using *hcitool lescan*, you will have to press the side button on the SensorTag.
 5. You also need the BeagleBone to have internet access, this can be gatewayed over the USB link or provided separately through the BeagleBone Ethernet port.
 
-Now you are ready to install the sample and connect to the IBM INternet of Things Quickstart Cloud.
+Now you are ready to install the sample and connect to the IBM Internet of Things Cloud Quickstart service.
 
 Connect
 -------
@@ -28,7 +28,7 @@ Connect
    Installs required node packages – async, sensortag, MQTT – using npm.
 5. Now run the sample with: node ibm_iot_sensortag_quickstart.js
 
-This sample runs in the foreground and will need to be restarted if the connection is lost of the SensorTag disconnects.
-Press the button on the side of the SensorTag so that it starts sending sensor data to IoT Cloud.
-The sample will display the MAC address needed for the [quickstart site](http://quickstart.internetofthings.ibmcloud.com) on the console.
+This sample runs in the foreground and will need to be restarted if the connection is lost or the SensorTag disconnects.
+Press the button on the side of the SensorTag so that it starts sending sensor data to the IBM Internet of Things Cloud Quickstart service.
+The sample will display the MAC address on the console. Enter the MAC address at the [quickstart site](http://quickstart.internetofthings.ibmcloud.com) to see a visualisation of the sensor data.
 
