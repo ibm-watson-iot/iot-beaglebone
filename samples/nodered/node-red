@@ -1,0 +1,38 @@
+#!/bin/sh
+# Mananges Node-RED
+# /etc/init.d/node-red
+### BEGIN INIT INFO
+# Provides:	node-red
+# Required-Start:	$syslog
+# Required-Stop:	$syslog
+# Default-Start:	2 3 4 5
+# Default-Stop:		0 1 6
+# Short-Description:	Node-RED
+### END INIT INFO
+
+PIDFILE=/var/run/node-red.pid
+
+case "$1" in
+
+start)
+	echo "Starting Node-RED"
+	cd RED_DIR
+	nohup node --max-old-space-size=196 red.js > node.out 2> node.err &
+	echo $! > $PIDFILE
+;;
+
+stop)
+	echo "Stopping Node-RED"
+	kill `cat $PIDFILE`
+	rm -f $PIDFILE
+;;
+
+restart)
+	echo "Restarting Node-RED"
+	$0 stop
+	$0 start
+;;
+*)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
