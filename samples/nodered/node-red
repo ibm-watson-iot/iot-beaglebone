@@ -17,7 +17,7 @@ case "$1" in
 start)
 	echo "Starting Node-RED"
 	cd RED_DIR
-	nohup node --max-old-space-size=196 red.js > node.out 2> node.err &
+	nohup node --max-old-space-size=196 red.js > ../node-red.out 2>&1 &
 	echo $! > $PIDFILE
 ;;
 
