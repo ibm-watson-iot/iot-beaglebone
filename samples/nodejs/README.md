@@ -28,7 +28,8 @@ Connect
    Installs required node packages – async, sensortag, MQTT – using npm.
 5. Now run the sample with: node ibm_iot_sensortag_quickstart.js
 
-This sample runs in the foreground and will need to be restarted if the connection is lost or the SensorTag disconnects.
-Press the button on the side of the SensorTag so that it starts sending sensor data to the IBM Internet of Things Cloud Quickstart service.
-The sample will display the MAC address on the console. Enter the MAC address at the [quickstart site](http://quickstart.internetofthings.ibmcloud.com) to see a visualisation of the sensor data.
++ This sample runs in the foreground and will need to be restarted if the connection is lost or the SensorTag disconnects.
++ Press the button on the side of the SensorTag so that it starts sending sensor data to the IBM Internet of Things Cloud Quickstart service.
++ The sample will display the MAC address on the console. Enter the MAC address at the [quickstart site](http://quickstart.internetofthings.ibmcloud.com) to see a visualisation of the sensor data.
++ You should stop the node-red service __service node-red stop__ if you have it running when using this sample.
 
