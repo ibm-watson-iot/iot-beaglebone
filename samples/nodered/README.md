@@ -36,4 +36,4 @@ Troubleshooting and Development
 + Check the node-red.out file for diagnostics from node-red.
 + To confirm that the SensorTag can be detected use *hcitool lescan*, you will have to press the side button on the SensorTag, and when the tag id is displayed press ctrl-C.
 + You can connect a browser to port [beaglebone-address:1880] in order to develop the flow in the Node-RED UI, activate debug nodes to show events emitted.
-In case you need to rebiild the flow the code for the tagData merge function can be found in the file function-tagData-merge.js
++ In case you need to rebiild the flow the code for the tagData merge function can be found in the file function-tagData-merge.js
