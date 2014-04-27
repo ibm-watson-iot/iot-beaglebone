@@ -31,7 +31,7 @@ Connect
 6. Start node-red with __service node-red start__
 
 
-Diagnostics and Development
+Troubleshooting and Development
 ---------------------------
 + Check the node-red.out file for diagnostics from node-red.
 + To confirm that the SensorTag can be detected use *hcitool lescan*, you will have to press the side button on the SensorTag, and when the tag id is displayed press ctrl-C.
