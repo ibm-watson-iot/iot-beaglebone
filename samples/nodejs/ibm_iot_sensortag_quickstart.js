@@ -154,8 +154,8 @@ SensorTag.discover(function(sensorTag) {
       },
       function(callback) {
         sensorTag.on('irTemperatureChange', function(objectTemperature, ambientTemperature) {
-	      tagData.d.objectTemp =  objectTemperature.toFixed(1);
-              tagData.d.ambientTemp =  ambientTemperature.toFixed(1);
+	      tagData.d.objectTemp =  parseFloat(objectTemperature.toFixed(1));
+              tagData.d.ambientTemp =  parseFloat(ambientTemperature.toFixed(1));
         });
 
         sensorTag.notifyIrTemperature(function() {
@@ -166,9 +166,9 @@ SensorTag.discover(function(sensorTag) {
       },
       function(callback) {
         sensorTag.on('accelerometerChange', function(x, y, z) {
-	      tagData.d.accelX = x.toFixed(1);
-	      tagData.d.accelY = y.toFixed(1);
-	      tagData.d.accelZ = z.toFixed(1);
+	      tagData.d.accelX = parseFloat(x.toFixed(1));
+	      tagData.d.accelY = parseFloat(y.toFixed(1));
+	      tagData.d.accelZ = parseFloat(z.toFixed(1));
         });
 
         sensorTag.notifyAccelerometer(function() {
@@ -179,8 +179,8 @@ SensorTag.discover(function(sensorTag) {
       },
       function(callback) {
         sensorTag.on('humidityChange', function(temperature, humidity) {
-	      tagData.d.humidity =  humidity.toFixed(1);
-          tagData.d.temp = temperature.toFixed(1);
+	      tagData.d.humidity =  parseFloat(humidity.toFixed(1));
+          tagData.d.temp = parseFloat(temperature.toFixed(1));
         });
 
         sensorTag.notifyHumidity(function() {
@@ -191,9 +191,9 @@ SensorTag.discover(function(sensorTag) {
       },
       function(callback) {
         sensorTag.on('magnetometerChange', function(x, y, z) {
-	      tagData.d.magX = x.toFixed(1);
-	      tagData.d.magY = y.toFixed(1);
-	      tagData.d.magZ = z.toFixed(1);
+	      tagData.d.magX = parseFloat(x.toFixed(1));
+	      tagData.d.magY = parseFloat(y.toFixed(1));
+	      tagData.d.magZ = parseFloat(z.toFixed(1));
         });
 
         sensorTag.notifyMagnetometer(function() {
@@ -204,7 +204,7 @@ SensorTag.discover(function(sensorTag) {
       },
       function(callback) {
         sensorTag.on('barometricPressureChange', function(pressure) {
-	  		tagData.d.pressure =  pressure.toFixed(1);
+	  		tagData.d.pressure =  parseFloat(pressure.toFixed(1));
         });
 
         sensorTag.notifyBarometricPressure(function() {
@@ -216,9 +216,9 @@ SensorTag.discover(function(sensorTag) {
       
       function(callback) {
         sensorTag.on('gyroscopeChange', function(x, y, z) {
-	  	  tagData.d.gyroX = x.toFixed(1);
-	      tagData.d.gyroY = y.toFixed(1);
-	      tagData.d.gyroZ = z.toFixed(1);
+	  	  tagData.d.gyroX = parseFloat(x.toFixed(1));
+	      tagData.d.gyroY = parseFloat(y.toFixed(1));
+	      tagData.d.gyroZ = parseFloat(z.toFixed(1));
         });
 
         sensorTag.notifyGyroscope(function() {
