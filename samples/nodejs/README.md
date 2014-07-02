@@ -25,11 +25,13 @@ Connect
 2. Clone the GitHub project: __git clone https://github.com/ibm-messaging/iot-beaglebone__
 3. __cd iot-beaglebone/samples/nodejs__
 4. Run __./setup.sh__. This completes the following tasks:
-   Installs required node packages – async, sensortag, MQTT – using npm.
-5. Now run the sample with: node ibm_iot_sensortag_quickstart.js
+   Installs required node packages – async, sensortag, MQTT, properties – using npm.
+5. Now run the sample with: node iot_sensortag.js
 
 + This sample runs in the foreground and will need to be restarted if the connection is lost or the SensorTag disconnects.
 + Press the button on the side of the SensorTag so that it starts sending sensor data to the IBM Internet of Things Cloud Quickstart service.
 + The sample will display the MAC address on the console. Enter the MAC address at the [quickstart site](http://quickstart.internetofthings.ibmcloud.com) to see a visualisation of the sensor data.
-+ You should stop the node-red service __service node-red stop__ if you have it running when using this sample.
++ The LED nearest the ethernet socket LED 3 will flash each time a message is sent.
+
+
 

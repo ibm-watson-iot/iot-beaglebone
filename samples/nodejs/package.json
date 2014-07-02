@@ -6,7 +6,8 @@
     "async": "0.7.0",
     "getmac": "1.0.6",
     "mqtt": "0.3.8",
-    "sensortag": "0.1.7"
+    "sensortag": "0.1.7",
+    "properties": "1.2.1"
   },
   "engine": "node >= 0.10.0"
 }

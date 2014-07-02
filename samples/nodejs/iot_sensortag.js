@@ -8,6 +8,7 @@
 //
 // Contributors:
 //  IBM - Initial Contribution
+//      - update or iot-2, registration and commands
 //*****************************************************************************
 
 // IoT Cloud Example Client
@@ -19,18 +20,21 @@ var SensorTag = require('sensortag');
 var mqtt = require('mqtt');
 var getmac = require('getmac');
 var properties = require('properties');
+var fs = require('fs');
 
 // constants
 var u_port = "1883";
 var s_port = "8883";
-var topic = "iot-2/evt/sample/fmt/json";
+var pub_topic = "iot-2/evt/sample/fmt/json";
+var sub_topic = "iot-2/cmd/blink/fmt/json";
 var qs_org = "quickstart";
 var reg_domain = ".messaging.internetofthings.ibmcloud.com";
 var qs_host = "messaging.quickstart.internetofthings.ibmcloud.com";
-qs_host = "37.58.109.238"; // DELETE ME qs ams01-6
-qs_host = "46.16.189.243"; // DELETE ME msproxy-quickstart.staging // reg = 46.16.189.242
+qs_host = "46.16.189.243"; // DELETE ME msproxy-quickstart.staging // reg =
+							// 46.16.189.242
 var qs_type = "iotsample-ti-bbst";
 var configFile = "./device.cfg";
+var ledPath ="/sys/class/leds/beaglebone:green:usr";
 
 
 // globals
@@ -41,8 +45,48 @@ var type = qs_type;
 var host = qs_host;
 var deviceId;
 var password;
-var method;
+var username;
 
+
+// LED functions
+// run asynchronously, callbacks just trap unexpected errors
+function ledWrite(extra, content, callback) {
+  fs.writeFile(ledPath+extra, content, function(err) {
+	if (err) throw err;
+  });
+  if (callback) callback();
+}
+
+// set the trigger: none, nand-disk, mmc0, mmc1, timer, oneshot, cpu, heartbeat, backlight, gpio ...
+function ledTrigger(led, trigger, callback) {
+	ledWrite(led+"/trigger", trigger, callback);
+}
+
+// with oneshot trigger
+function ledShot(led, callback) {
+	ledWrite(led+"/shot", "1", callback);
+}
+
+// set blink or not
+function ledBlink(led, interval) {
+	//console.log("LED " + interval);
+	if (interval) {
+	  ledWrite(led+"/delay_on", interval);
+      ledWrite(led+"/delay_off", interval);
+	} else {
+	  ledWrite(led+"/delay_on", 1);
+	  ledWrite(led+"/delay_off", 10000);	
+	}
+}
+
+// initial modes
+ledTrigger(0, "timer");
+ledTrigger(1, "none");
+ledTrigger(2, "none");
+ledTrigger(3, "oneshot");
+
+
+// event data object
 var tagData = {};
 tagData.d = {};
 tagData.toJson = function() {
@@ -53,23 +97,37 @@ tagData.publish = function() {
 	// alternative: only enable publish when most sensortag callbacks have fired
 
 	if (tagData.d.hasOwnProperty("temp")) {
-		client.publish(topic, tagData.toJson());
-		console.log(topic, tagData.toJson());
+		client.publish(pub_topic, tagData.toJson());
+		ledShot(3);
+		//console.log(pub_topic, tagData.toJson()); // trace
 	}
 };
 
-// code ...
-
+// error report
 function missing(what) {
 	console.log("No " + what + " in " + configFile);
 	process.exit(1);
+}
+
+// called on message received
+function doCommand(topic, message, packet) {
+	console.log("received command: " + topic + " msg: " + message);
+	var topics = topic.split('/');
+	switch(topics[2]) {
+	case "blink": 
+		var payload = JSON.parse(message);
+		ledBlink(0, payload.interval);
+		break;
+	default:
+		console.log("Unxpected Command: " + topics[2]);
+	}
 }
 
 console.log('Press the side button on the SensorTag to connect');
 SensorTag.discover(function(sensorTag) {
 
 	sensorTag.on('disconnect', function() {
-		console.log('disconnected!');
+		console.log('Tag Disconnected');
 		process.exit(0);
 	});
 
@@ -82,13 +140,19 @@ SensorTag.discover(function(sensorTag) {
 					if (err && err.code != 'ENOENT')
 						throw err;
 					if (config) {
+						
 						org = config.org || missing('org');
 						type = config.type || missing('type');
 						deviceId = config.id || missing('id');
-						password = config.auth-token || missing('token');
-						method = config.auth-method || missing('method');
+						password = config['auth-token'] || missing('auth-token');
+						var method = config['auth-method'] || missing('auth-method');
+						if (method != 'use-auth-token') {
+							console.log("unexpected auth-method = " + method);
+							process.exit(1);
+						}
+						username = 'token';
 						host = org + reg_domain;
-						host = "46.16.189.242"; // DELETE ME STAGING 
+						host = "46.16.189.242"; // DELETE ME STAGING
 						tls = true;
 						qs_mode = false;
 					}
@@ -100,7 +164,7 @@ SensorTag.discover(function(sensorTag) {
 					getmac.getMac(function(err, macAddress) {
 						if (err)
 							throw err;
-						console.log('\tmac address = ' + macAddress);
+						console.log('MAC address = ' + macAddress);
 						deviceId = macAddress.replace(/:/g, '').toLowerCase();
 						callback();
 					});
@@ -109,7 +173,7 @@ SensorTag.discover(function(sensorTag) {
 			},
 			function(callback) { // connect MQTT client
 				var clientId = "d:" + org + ":" + type + ":" + deviceId;
-				console.log('\tMQTT clientId = ' + clientId);
+				console.log('MQTT clientId = ' + clientId);
 				if (qs_mode) {
 					client = mqtt.createClient(u_port, host, {
 						"clientId" : clientId,
@@ -117,37 +181,45 @@ SensorTag.discover(function(sensorTag) {
 					});
 				} else {
 					if (tls) {
-						console.log("TLS connect host: " + host + " port "
-								+ s_port);
+						console.log("TLS connect host: " + host + " port " + s_port);
 						client = mqtt.createSecureClient(s_port, host, {
 							"clientId" : clientId,
 							"keepalive" : 30,
-							"username" : method,
+							"username" : username,
 							"password" : password
 						});
 					} else {
-						console
-								.log("Connect host: " + host + " port "
-										+ u_port);
+						console.log("Connect host: " + host + " port " + u_port);
 						client = mqtt.createClient(u_port, host, {
 							"clientId" : clientId,
 							"keepalive" : 30,
-							"username" : method,
+							"username" : username,
 							"password" : password
 						});
 					}
 				}
+				client.on('connect', function() {
+					// not reliable since event may fire before handler
+					// installed
+					console.log('MQTT Connected');
+				});
 				client.on('error', function(err) {
 					console.log('client error' + err);
 					process.exit(1);
 				});
-				client.on('close', function(err) {
-					console.log('client close!' + err);
+				client.on('close', function() {
+					console.log('client closed');
 					process.exit(1);
 				});
 				callback();
-				// client.on('connected', callback);
-				// client.on('connect', callback);
+			},
+			function(callback) {
+				client.subscribe(sub_topic, { qos: 0 }, function(err, granted) { 
+					if (err) throw err;
+					console.log('Subscribed to ' + sub_topic);
+					callback();
+				});
+				client.on('message', doCommand);
 			},
 			function(callback) {
 				console.log('sensortag connect');
