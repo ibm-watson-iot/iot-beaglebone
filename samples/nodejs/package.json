@@ -1,0 +1,12 @@
+{
+  "name": "ibm_iot_sensortag_quickstart",
+  "description": "IBM Internet of Things Quickstart Sample",
+  "author": "IBM",
+  "dependencies": {
+    "async": "0.7.0",
+    "getmac": "1.0.6",
+    "mqtt": "0.3.8",
+    "sensortag": "0.1.7"
+  },
+  "engine": "node >= 0.10.0"
+}
