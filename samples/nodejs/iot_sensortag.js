@@ -29,7 +29,7 @@ var pub_topic = "iot-2/evt/sample/fmt/json";
 var sub_topic = "iot-2/cmd/blink/fmt/json";
 var qs_org = "quickstart";
 var reg_domain = ".messaging.internetofthings.ibmcloud.com";
-var qs_host = "messaging.quickstart.internetofthings.ibmcloud.com";
+var qs_host = "quickstart.messaging.internetofthings.ibmcloud.com";
 qs_host = "46.16.189.243"; // DELETE ME msproxy-quickstart.staging // reg =
 							// 46.16.189.242
 var qs_type = "iotsample-ti-bbst";
