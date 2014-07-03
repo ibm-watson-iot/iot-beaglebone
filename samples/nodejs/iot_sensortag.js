@@ -146,11 +146,11 @@ SensorTag.discover(function(sensorTag) {
 						deviceId = config.id || missing('id');
 						password = config['auth-token'] || missing('auth-token');
 						var method = config['auth-method'] || missing('auth-method');
-						if (method != 'use-auth-token') {
+						if (method != 'token') {
 							console.log("unexpected auth-method = " + method);
 							process.exit(1);
 						}
-						username = 'token';
+						username = 'use-auth-token';
 						host = org + reg_domain;
 						host = "46.16.189.242"; // DELETE ME STAGING
 						tls = true;
