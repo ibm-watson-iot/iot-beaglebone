@@ -1,6 +1,11 @@
 {
-  "name": "ibm_iot_sensortag_quickstart",
-  "description": "IBM Internet of Things Quickstart Sample",
+  "name": "iot_sensortag",
+  "description": "IBM Internet of Things cloud client example",
+  "homepage": "http://internetofthings.ibmcloud.com",
+  "repository" : {
+    "type" : "git",
+  	"url" : "http://github.com/ibm-messaging/iot-beaglebone.git"
+  },
   "author": "IBM",
   "dependencies": {
     "async": "0.7.0",

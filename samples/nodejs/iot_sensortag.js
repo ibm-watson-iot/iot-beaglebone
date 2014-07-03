@@ -68,11 +68,11 @@ function ledShot(led, callback) {
 }
 
 // set blink or not
-function ledBlink(led, interval) {
-	//console.log("LED " + interval);
-	if (interval) {
-	  ledWrite(led+"/delay_on", interval);
-      ledWrite(led+"/delay_off", interval);
+function ledBlink(led, rate) {
+	//console.log("LED " + rate);
+	if (rate) {
+	  ledWrite(led+"/delay_on", parseInt(400/rate));
+      ledWrite(led+"/delay_off", parseInt(400/rate));
 	} else {
 	  ledWrite(led+"/delay_on", 1);
 	  ledWrite(led+"/delay_off", 10000);	
@@ -214,12 +214,17 @@ SensorTag.discover(function(sensorTag) {
 				callback();
 			},
 			function(callback) {
-				client.subscribe(sub_topic, { qos: 0 }, function(err, granted) { 
-					if (err) throw err;
-					console.log('Subscribed to ' + sub_topic);
+				ledBlink(0, 0); // turn off
+				if (!qs_mode) {
+					client.subscribe(sub_topic, { qos: 0 }, function(err, granted) { 
+						if (err) throw err;
+						console.log('Subscribed to ' + sub_topic);
+						callback();
+					});
+					client.on('message', doCommand);
+				} else {
 					callback();
-				});
-				client.on('message', doCommand);
+				}
 			},
 			function(callback) {
 				console.log('sensortag connect');
