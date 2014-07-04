@@ -30,8 +30,6 @@ var sub_topic = "iot-2/cmd/blink/fmt/json";
 var qs_org = "quickstart";
 var reg_domain = ".messaging.internetofthings.ibmcloud.com";
 var qs_host = "quickstart.messaging.internetofthings.ibmcloud.com";
-qs_host = "46.16.189.243"; // DELETE ME msproxy-quickstart.staging // reg =
-							// 46.16.189.242
 var qs_type = "iotsample-ti-bbst";
 var configFile = "./device.cfg";
 var ledPath ="/sys/class/leds/beaglebone:green:usr";
@@ -152,7 +150,6 @@ SensorTag.discover(function(sensorTag) {
 						}
 						username = 'use-auth-token';
 						host = org + reg_domain;
-						host = "46.16.189.242"; // DELETE ME STAGING
 						tls = true;
 						qs_mode = false;
 					}
