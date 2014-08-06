@@ -8,7 +8,7 @@
 //
 // Contributors:
 //  IBM - Initial Contribution
-//      - update or iot-2, registration and commands
+//      - update for iot-2, registration and commands
 //*****************************************************************************
 
 // IoT Cloud Example Client
