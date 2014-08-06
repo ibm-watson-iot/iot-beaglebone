@@ -148,7 +148,7 @@ SensorTag.discover(function(sensorTag) {
 							console.log("unexpected auth-method = " + method);
 							process.exit(1);
 						}
-						username = 'use-auth-token';
+						username = 'use-token-auth';
 						host = org + reg_domain;
 						tls = true;
 						qs_mode = false;
