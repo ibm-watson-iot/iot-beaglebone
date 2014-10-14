@@ -33,6 +33,7 @@ var qs_host = "quickstart.messaging.internetofthings.ibmcloud.com";
 var qs_type = "iotsample-ti-bbst";
 var configFile = "./device.cfg";
 var ledPath ="/sys/class/leds/beaglebone:green:usr";
+var caCerts = ["./IoTFoundation.pem", "IoTFoundation-CA.pem"];
 
 
 // globals
@@ -173,25 +174,27 @@ SensorTag.discover(function(sensorTag) {
 				console.log('MQTT clientId = ' + clientId);
 				if (qs_mode) {
 					client = mqtt.createClient(u_port, host, {
-						"clientId" : clientId,
-						"keepalive" : 30
+						clientId : clientId,
+						keepalive : 30
 					});
 				} else {
 					if (tls) {
 						console.log("TLS connect host: " + host + " port " + s_port);
 						client = mqtt.createSecureClient(s_port, host, {
-							"clientId" : clientId,
-							"keepalive" : 30,
-							"username" : username,
-							"password" : password
+							clientId : clientId,
+							keepalive : 30,
+							username : username,
+							password : password,
+							rejectUnauthorized: true,
+							ca: caCerts
 						});
 					} else {
 						console.log("Connect host: " + host + " port " + u_port);
 						client = mqtt.createClient(u_port, host, {
-							"clientId" : clientId,
-							"keepalive" : 30,
-							"username" : username,
-							"password" : password
+							clientId : clientId,
+							keepalive : 30,
+							username : username,
+							password : password
 						});
 					}
 				}
