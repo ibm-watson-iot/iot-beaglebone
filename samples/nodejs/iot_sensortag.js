@@ -162,12 +162,93 @@ SensorTag.discover(function(sensorTag) {
 					getmac.getMac(function(err, macAddress) {
 						if (err)
 							throw err;
-						console.log('MAC address = ' + macAddress);
 						deviceId = macAddress.replace(/:/g, '').toLowerCase();
 						callback();
 					});
 				} else
 					callback();
+			},
+			function(callback) {
+				console.log('SensorTag connected');
+				sensorTag.connect(callback);
+			},
+			function(callback) {
+				console.log('Discovering services and characteristics');
+				sensorTag.discoverServicesAndCharacteristics(callback);
+			},
+			function(callback) {
+				sensorTag.readDeviceName(function(deviceName) {
+					console.log('Device name = ' + deviceName);
+					tagData.d.myName = deviceName;
+					callback();
+				});
+			},
+			function(callback) {
+				sensorTag.readSystemId(function(systemId) {
+					console.log('System id = ' + systemId);
+					callback();
+					tagData.d.myName += " " + systemId;
+				});
+			},
+			function(callback) {
+				sensorTag.readSerialNumber(function(serialNumber) {
+					console.log('Serial number = ' + serialNumber);
+					callback();
+				});
+			},
+			function(callback) {
+				sensorTag.readFirmwareRevision(function(firmwareRevision) {
+					console.log('Firmware revision = ' + firmwareRevision);
+					callback();
+				});
+			},
+			function(callback) {
+				sensorTag.readHardwareRevision(function(hardwareRevision) {
+					console.log('Hardware revision = ' + hardwareRevision);
+					callback();
+				});
+			},
+			function(callback) {
+				sensorTag.readHardwareRevision(function(softwareRevision) {
+					console.log('Software revision = ' + softwareRevision);
+					callback();
+				});
+			},
+			function(callback) {
+				sensorTag.readManufacturerName(function(manufacturerName) {
+					console.log('Manufacturer name = ' + manufacturerName);
+					callback();
+				});
+			},
+			function(callback) {
+				console.log('Enable IR temperature');
+				sensorTag.enableIrTemperature(callback);
+			},
+			function(callback) {
+				console.log('Enable accelerometer');
+				sensorTag.enableAccelerometer(callback);
+			},
+			function(callback) {
+				sensorTag.setAccelerometerPeriod(1000, callback);
+			},
+			function(callback) {
+				console.log('Enable humidity sensor');
+				sensorTag.enableHumidity(callback);
+			},
+			function(callback) {
+				console.log('Enable magnetometer');
+				sensorTag.enableMagnetometer(callback);
+			},
+			function(callback) {
+				sensorTag.setMagnetometerPeriod(1000, callback);
+			},
+			function(callback) {
+				console.log('Enable barometer');
+				sensorTag.enableBarometricPressure(callback);
+			},
+			function(callback) {
+				console.log('Enable gyroscope');
+				sensorTag.enableGyroscope(callback);
 			},
 			function(callback) { // connect MQTT client
 				var clientId = "d:" + org + ":" + type + ":" + deviceId;
@@ -179,7 +260,7 @@ SensorTag.discover(function(sensorTag) {
 					});
 				} else {
 					if (tls) {
-						console.log("TLS connect host: " + host + " port " + s_port);
+						console.log("TLS connect: " + host + ":" + s_port);
 						client = mqtt.createSecureClient(s_port, host, {
 							clientId : clientId,
 							keepalive : 30,
@@ -202,6 +283,12 @@ SensorTag.discover(function(sensorTag) {
 					// not reliable since event may fire before handler
 					// installed
 					console.log('MQTT Connected');
+					console.log("Sending data")
+					if (qs_mode) {
+						console.log('MAC address = ' + deviceId);
+						console.log('Go to the following link to see your device data;');
+						console.log('http://quickstart.internetofthings.ibmcloud.com/#/device/' + deviceId + '/sensor/')
+					}
 				});
 				client.on('error', function(err) {
 					console.log('client error' + err);
@@ -225,95 +312,6 @@ SensorTag.discover(function(sensorTag) {
 				} else {
 					callback();
 				}
-			},
-			function(callback) {
-				console.log('sensortag connect');
-				sensorTag.connect(callback);
-			},
-			function(callback) {
-				console.log('discoverServicesAndCharacteristics');
-				sensorTag.discoverServicesAndCharacteristics(callback);
-			},
-			function(callback) {
-				console.log('readDeviceName');
-				sensorTag.readDeviceName(function(deviceName) {
-					console.log('\tdevice name = ' + deviceName);
-					tagData.d.myName = deviceName;
-					callback();
-				});
-			},
-			function(callback) {
-				console.log('readSystemId');
-				sensorTag.readSystemId(function(systemId) {
-					console.log('\tsystem id = ' + systemId);
-					callback();
-					tagData.d.myName += " " + systemId;
-				});
-			},
-			function(callback) {
-				console.log('readSerialNumber');
-				sensorTag.readSerialNumber(function(serialNumber) {
-					console.log('\tserial number = ' + serialNumber);
-					callback();
-				});
-			},
-			function(callback) {
-				console.log('readFirmwareRevision');
-				sensorTag.readFirmwareRevision(function(firmwareRevision) {
-					console.log('\tfirmware revision = ' + firmwareRevision);
-					callback();
-				});
-			},
-			function(callback) {
-				console.log('readHardwareRevision');
-				sensorTag.readHardwareRevision(function(hardwareRevision) {
-					console.log('\thardware revision = ' + hardwareRevision);
-					callback();
-				});
-			},
-			function(callback) {
-				console.log('readSoftwareRevision');
-				sensorTag.readHardwareRevision(function(softwareRevision) {
-					console.log('\tsoftware revision = ' + softwareRevision);
-					callback();
-				});
-			},
-			function(callback) {
-				console.log('readManufacturerName');
-				sensorTag.readManufacturerName(function(manufacturerName) {
-					console.log('\tmanufacturer name = ' + manufacturerName);
-					callback();
-				});
-			},
-			function(callback) {
-				console.log('enableIrTemperature');
-				sensorTag.enableIrTemperature(callback);
-			},
-			function(callback) {
-				console.log('enableAccelerometer');
-				sensorTag.enableAccelerometer(callback);
-			},
-			function(callback) {
-				sensorTag.setAccelerometerPeriod(1000, callback);
-			},
-			function(callback) {
-				console.log('enableHumidity');
-				sensorTag.enableHumidity(callback);
-			},
-			function(callback) {
-				console.log('enableMagnetometer');
-				sensorTag.enableMagnetometer(callback);
-			},
-			function(callback) {
-				sensorTag.setMagnetometerPeriod(1000, callback);
-			},
-			function(callback) {
-				console.log('enableBarometricPressure');
-				sensorTag.enableBarometricPressure(callback);
-			},
-			function(callback) {
-				console.log('enableGyroscope');
-				sensorTag.enableGyroscope(callback);
 			},
 			function(callback) {
 				setTimeout(callback, 1000);
