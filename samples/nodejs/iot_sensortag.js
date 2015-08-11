@@ -209,7 +209,7 @@ SensorTag.discover(function(sensorTag) {
 				});
 			},
 			function(callback) {
-				sensorTag.readHardwareRevision(function(softwareRevision) {
+				sensorTag.readSoftwareRevision(function(softwareRevision) {
 					console.log('Software revision = ' + softwareRevision);
 					callback();
 				});
